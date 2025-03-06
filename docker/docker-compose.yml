@@ -1,0 +1,91 @@
+version: '3.3'
+services:
+    nginx:
+        image: nginx:latest
+        container_name: nginx
+        ports:
+            - "80:80"
+            - "443:443"
+        volumes:
+            - ./nginx/conf.d:/etc/nginx/conf.d
+            - ../public:/var/www/framework
+        links:
+            - php
+    mysql:
+        image: mysql:8.0
+        restart: always
+        ports:
+            - "3306:3306"
+        container_name: mysql
+        environment:
+            - MYSQL_ROOT_PASSWORD=mypassword
+            - MYSQL_DATABASE=framework
+            - MYSQL_USER=framework
+            - MYSQL_PASSWORD=framework
+        volumes:
+            - ./mysql:/var/lib/mysql
+    php:
+        build: ./php
+        container_name: php
+        volumes:
+            - ../public:/var/www/framework
+        links:
+            - mysql
+    phpmyadmin:
+        image: phpmyadmin/phpmyadmin
+        container_name: phpmyadmin
+        ports:
+            - 8090:80
+        links:
+            - mysql:db
+    rabbitmq:
+        image: rabbitmq:3.7.7-management-alpine
+        restart: always
+        environment:
+            RABBITMQ_DEFAULT_USER: user
+            RABBITMQ_DEFAULT_PASS: 123
+        ports:
+            - "127.0.0.1:5673:5672"
+            - "127.0.0.1:15673:15672"
+    opensearch-node:
+      image: opensearchproject/opensearch:latest
+      container_name: opensearch-node
+      environment:
+        - cluster.name=opensearch-cluster
+        - node.name=opensearch-node
+        - discovery.seed_hosts=opensearch-node
+        - cluster.initial_cluster_manager_nodes=opensearch-node
+        - bootstrap.memory_lock=true
+        - "OPENSEARCH_JAVA_OPTS=-Xms512m -Xmx512m"
+        - "OPENSEARCH_INITIAL_ADMIN_PASSWORD=AkdfierkmcS!1234567"
+      ulimits:
+        memlock:
+          soft: -1
+          hard: -1
+        nofile:
+          soft: 65536
+          hard: 65536
+      volumes:
+        - opensearch-data:/usr/share/opensearch/data
+      ports:
+        - 9200:9200
+        - 9600:9600
+      networks:
+        - opensearch-net
+    opensearch-dashboards:
+        image: opensearchproject/opensearch-dashboards:latest
+        container_name: opensearch-dashboards
+        ports:
+        - 5601:5601
+        expose:
+        - "5601"
+        environment:
+          OPENSEARCH_HOSTS: '["https://opensearch-node:9200"]'
+        networks:
+        - opensearch-net
+
+volumes:
+  opensearch-data:
+
+networks:
+  opensearch-net:
