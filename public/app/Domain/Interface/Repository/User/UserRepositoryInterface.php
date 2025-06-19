@@ -11,5 +11,5 @@ interface UserRepositoryInterface extends BaseRepositoryInterface
 
     public function updateByFilter(UserDto $Dto, array $filter);
 
-    public function update(UserDto $Dto, int $id);
+    public function updateById(UserDto $Dto, int $id);
 }

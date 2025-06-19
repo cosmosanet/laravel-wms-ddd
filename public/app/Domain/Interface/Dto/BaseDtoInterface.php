@@ -6,5 +6,5 @@ use JsonSerializable;
 
 interface BaseDtoInterface extends JsonSerializable
 {
-    public function toArray(): array;
+    public function jsonSerialize(): array;
 }

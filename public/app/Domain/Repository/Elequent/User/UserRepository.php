@@ -4,7 +4,8 @@ namespace App\Domain\Repository\Elequent\User;
 
 use App\Domain\Dto\Entity\User\UserDto;
 use App\Domain\Interface\Dto\BaseDtoInterface;
-use App\Domain\Interface\Dto\DtoFactory\UserDtoFactoryInterface;
+use App\Domain\Interface\Factory\User\RoleDtoFactoryInterface;
+use App\Domain\Interface\Factory\User\UserDtoFactoryInterface;
 use App\Domain\Interface\Repository\User\UserRepositoryInterface;
 use App\Domain\Model\User\User;
 use App\Domain\Repository\Elequent\BaseAbstractRepository;
@@ -16,6 +17,7 @@ class UserRepository extends BaseAbstractRepository implements UserRepositoryInt
     public function __construct(
         protected User $model,
         protected UserDtoFactoryInterface $dtoFactory,
+        protected RoleDtoFactoryInterface $RoleDtoFactory,
     ) {}
 
     public function create(UserDto $Dto): void
@@ -24,7 +26,7 @@ class UserRepository extends BaseAbstractRepository implements UserRepositoryInt
            'name' => $Dto->name,
            'email' => $Dto->email,
            'password' => $Dto->password,
-           'id_role' => $Dto->roleId
+           'id_role' => $Dto->role->id,
        ]);
     }
 
@@ -34,29 +36,33 @@ class UserRepository extends BaseAbstractRepository implements UserRepositoryInt
             'name' => $Dto->name,
             'email' => $Dto->email,
             'password' => $Dto->password,
-            'id_role' => $Dto->roleId
+            'id_role' => $Dto->role->id,
         ])->update($filter);
     }
 
-    public function update(UserDto $Dto, int $id): void
+    public function updateById(UserDto $Dto, int $id): void
     {
         $this->model::where([
+            'id' => $id
+        ])->update([
             'name' => $Dto->name,
             'email' => $Dto->email,
             'password' => $Dto->password,
-            'id_role' => $Dto->roleId
-        ])->update(['id' => $id]);
+            'id_role' => $Dto->role->id,
+        ]);
     }
 
     protected function createDto($model): BaseDtoInterface
     {
-        $role = null;
-//            $this->roleRepository->getById($user->getRoleId());
         return $this->dtoFactory->create(
+            $model->id,
             $model->name,
             $model->email,
             $model->password,
-            $model,
+            $this->RoleDtoFactory->create(
+                $model->role?->id,
+                $model->role?->name
+            ),
         );
     }
 }

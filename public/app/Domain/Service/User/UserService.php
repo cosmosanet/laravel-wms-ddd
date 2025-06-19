@@ -2,7 +2,7 @@
 
 namespace App\Domain\Service\User;
 
-use App\Domain\Interface\Dto\DtoFactory\UserDtoFactoryInterface;
+use App\Domain\Interface\Factory\User\UserDtoFactoryInterface;
 use App\Domain\Interface\Repository\User\UserRepositoryInterface;
 use App\Domain\Interface\Service\BaseServiceInterface;
 
@@ -24,14 +24,11 @@ class UserService implements BaseServiceInterface
 
     public function get()
     {
-        //  $dto = $this->userDtoFactory->create('qwe', 'qwe@qwe.com', 'qwe');
-        $dto = $this->userDtoFactory->create();
-        $dto->setName('qwe');
-        $dto->setEmail('qwe@qwe.com');
-        $dto->setPassword('qwe');
-        $dto->setRoleId();
-//        $this->repository->create($dto);
+        return $this->repository->first();
+    }
 
-        return $this->repository->first()->toArray();
+    public function getUsersList()
+    {
+        return $this->repository->get();
     }
 }

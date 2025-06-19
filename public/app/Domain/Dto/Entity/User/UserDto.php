@@ -10,10 +10,11 @@ use App\Domain\Dto\Entity\BaseAbstractDto;
 class UserDto extends BaseAbstractDto
 {
     public function __construct(
+        public private(set) int $id,
         public private(set) Name $name,
         public private(set) Email $email,
         public private(set) Password $password,
-        public private(set) ?int $roleId = null
+        public private(set) ?BaseAbstractDto $role = null
     ) {}
 
     public function setName(string $name): UserDto
@@ -33,13 +34,6 @@ class UserDto extends BaseAbstractDto
     public function setPassword(string $password): UserDto
     {
         $this->password->set($password);
-
-        return $this;
-    }
-
-    public function setRoleId(?int $roleId = null): UserDto
-    {
-        $this->roleId = $roleId;
 
         return $this;
     }

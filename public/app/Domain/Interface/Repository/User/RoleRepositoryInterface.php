@@ -11,5 +11,5 @@ interface RoleRepositoryInterface extends BaseRepositoryInterface
 
     public function updateByFilter(UserDto $Dto, array $filter): void;
 
-    public function update(UserDto $Dto, int $id): void;
+    public function updateById(UserDto $Dto, int $id): void;
 }

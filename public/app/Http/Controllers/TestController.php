@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Domain\Interface\Service\BaseServiceInterface;
+use Illuminate\Support\Facades\Auth;
 
 class TestController
 {
@@ -16,5 +17,15 @@ class TestController
     public function index()
     {
         var_dump($this->userService->get());
+    }
+
+    public function admin()
+    {
+        return view(
+            'admin.admin',
+            [
+                'users' => $this->userService->getUsersList()->getValues()
+            ]
+        );
     }
 }

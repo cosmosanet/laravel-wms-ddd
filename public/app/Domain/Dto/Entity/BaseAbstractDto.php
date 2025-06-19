@@ -16,10 +16,4 @@ abstract class BaseAbstractDto implements BaseDtoInterface
         }
         return $array;
     }
-
-    public function toArray(): array
-    {
-        return json_decode(json_encode($this->jsonSerialize()), true);
-    }
-
 }
