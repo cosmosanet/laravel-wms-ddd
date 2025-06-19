@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
+namespace App\Domain\Model\User;
+
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -18,9 +19,11 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $fillable = [
+        'id',
         'name',
         'email',
         'password',
+        'id_role'
     ];
 
     /**
@@ -44,5 +47,10 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    protected function role(): HasOne
+    {
+        return $this->hasOne(Role::class, 'id', 'id_role');
     }
 }
