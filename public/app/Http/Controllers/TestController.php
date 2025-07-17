@@ -2,30 +2,22 @@
 
 namespace App\Http\Controllers;
 
-use App\Domain\Interface\Service\BaseServiceInterface;
-use Illuminate\Support\Facades\Auth;
+use App\Domain\Interface\Service\CategoryServiceInterface;
+
 
 class TestController
 {
     private $userService;
 
-    public function __construct(BaseServiceInterface $userService)
+    public function __construct(
+        CategoryServiceInterface $userService,
+    )
     {
         $this->userService = $userService;
     }
 
-    public function index()
+    public function index(): void
     {
-        var_dump($this->userService->get());
-    }
-
-    public function admin()
-    {
-        return view(
-            'admin.admin',
-            [
-                'users' => $this->userService->getUsersList()->getValues()
-            ]
-        );
+        var_dump($this->userService->getUsersList()->getValues());
     }
 }

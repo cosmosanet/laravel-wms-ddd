@@ -2,7 +2,6 @@
 
 namespace App\Domain\Repository\Elequent;
 
-use App\Domain\Dto\Entity\DtoCollection;
 use App\Domain\Interface\Dto\BaseDtoInterface;
 use App\Domain\Interface\Dto\DtoCollectionInterface;
 
