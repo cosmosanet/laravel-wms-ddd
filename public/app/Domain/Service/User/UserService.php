@@ -4,9 +4,9 @@ namespace App\Domain\Service\User;
 
 use App\Domain\Interface\Factory\User\UserDtoFactoryInterface;
 use App\Domain\Interface\Repository\User\UserRepositoryInterface;
-use App\Domain\Interface\Service\BaseServiceInterface;
+use App\Domain\Interface\Service\UserServiceInterface;
 
-class UserService implements BaseServiceInterface
+class UserService implements UserServiceInterface
 {
     public function __construct(
         private UserRepositoryInterface $repository,

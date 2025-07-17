@@ -2,7 +2,6 @@
 
 namespace App\Domain\Factory;
 
-use App\Domain\Interface\Dto\BaseDtoInterface;
 use App\Domain\Interface\Dto\DtoCollectionInterface;
 
 class BaseDtoFactory
